@@ -13,8 +13,8 @@ class NovelUpdates implements Plugin.PluginBase {
   id = 'novelupdates1';
   name = 'Novel Updates 2.0';
   version = '1.0.1'; // Incrementing version for the fix
-  icon = 'src/en/novelupdates/icon.png';
-  customCSS = 'src/en/novelupdates/customCSS.css';
+  icon = 'src/en/novelupdates1/icon.png';
+  customCSS = 'src/en/novelupdates1/customCSS.css';
   site = 'https://www.novelupdates.com/';
 
   parseNovels(loadedCheerio: CheerioAPI) {
