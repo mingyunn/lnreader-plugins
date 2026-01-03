@@ -23,7 +23,8 @@
     "format": "prettier --write \"./**/*.{js,ts}\"",
     "format:check": "prettier --check \"./**/*.{js,ts}\"",
     "check:sites": "node scripts/check-plugin-sites.js",
-    "prepare": "husky"
+    "prepare": "husky",
+    "generate": "node scripts/generate-plugin-index.js"
   },
   "author": "LNReader",
   "license": "MIT",
