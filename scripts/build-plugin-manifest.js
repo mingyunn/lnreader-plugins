@@ -7,20 +7,27 @@ import { minify } from './terser.js';
 const REMOTE = execSync('git remote get-url origin')
   .toString()
   .replace(/[\s\n]/g, '');
-const BRANCH = (process.env.GITHUB_REF_NAME || 'master').replace('origin/', '');
+
+// Clean the branch name from environment variables
+const BRANCH = (process.env.GITHUB_REF_NAME || 'master')
+  .replace('refs/heads/', '')
+  .replace('origin/', '')
+  .trim();
 
 const matched = REMOTE.match(/([^:/]+?)\/([^/.]+)(\.git)?$/);
 if (!matched) throw Error('Cant parse git url');
 const USERNAME = matched[1];
 const REPO = matched[2];
 
-// FIX: Removed the trailing slash to prevent double slashes in the final URL
+// Use the cleaned branch name and ensure no trailing/double slashes
 const USER_CONTENT_LINK = process.env.USER_CONTENT_BASE
   ? process.env.USER_CONTENT_BASE.replace(/\/$/, '')
   : `https://raw.githubusercontent.com/${USERNAME}/${REPO}/${BRANCH}`;
 
 const STATIC_LINK = `${USER_CONTENT_LINK}/public/static`;
 const PLUGIN_LINK = `${USER_CONTENT_LINK}/.js/src/plugins`;
+
+// ... (The rest of your build-plugin-manifest.js logic remains the same)
 
 const DIST_DIR = '.dist';
 
