@@ -4,9 +4,9 @@ import { Filters, FilterTypes } from '@libs/filterInputs';
 import { Plugin } from '@/types/plugin';
 
 class NovelUpdates implements Plugin.PluginBase {
-  id = 'novelupdates';
-  name = 'Novel Updates';
-  version = '0.9.4';
+  id = 'novelupdates1';
+  name = 'Novel Updates 2.0';
+  version = '1.0.0';
   icon = 'src/en/novelupdates/icon.png';
   customCSS = 'src/en/novelupdates/customCSS.css';
   site = 'https://www.novelupdates.com/';
