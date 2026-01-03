@@ -18,9 +18,7 @@ const CURRENT_BRANCH = (
 
 // Final fallback to ensure no double slash in URL
 const BRANCH =
-  CURRENT_BRANCH_DETECTION === 'HEAD' || !CURRENT_BRANCH_DETECTION
-    ? 'master'
-    : CURRENT_BRANCH_DETECTION;
+  CURRENT_BRANCH === 'HEAD' || !CURRENT_BRANCH ? 'master' : CURRENT_BRANCH;
 
 const matched = REMOTE.match(/([^:/]+?)\/([^/.]+)(\.git)?$/);
 if (!matched) throw Error('Cant parse git url');
