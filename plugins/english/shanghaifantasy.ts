@@ -56,11 +56,10 @@ class ShanghaiFantasy implements Plugin.PluginBase {
       ],
     },
     term: {
-      type: FilterTypes.Picker,
+      type: FilterTypes.CheckboxGroup,
       label: 'Genre',
-      value: '',
+      value: [],
       options: [
-        { label: 'All', value: '' },
         { label: '1960s', value: '1960s' },
         { label: '1970s', value: '1970s' },
         { label: '1970s Era', value: '1970s Era' },
@@ -530,19 +529,21 @@ class ShanghaiFantasy implements Plugin.PluginBase {
 
   async popularNovels(
     pageNo: number,
-    // Change <Filters> to <typeof this.filters>
     options: Plugin.PopularNovelsOptions<typeof this.filters>,
   ): Promise<Plugin.NovelItem[]> {
     const novels: Plugin.NovelItem[] = [];
     const apiUrl = `${this.site}/wp-json/fiction/v1/novels/`;
 
-    // TypeScript now knows novelstatus.value is a string!
     const { novelstatus, term } = options.filters;
 
     const params = new URLSearchParams();
     params.append('page', pageNo.toString());
-    params.append('novelstatus', novelstatus?.value || '');
-    params.append('term', term?.value || '');
+    params.append('novelstatus', novelstatus.value);
+
+    // Join the array of selected genres into a comma-separated string
+    // This assumes the site's API handles multiple genres joined by commas
+    params.append('term', term.value.join(','));
+
     params.append('orderby', 'date');
     params.append('order', 'desc');
     params.append('query', '');
@@ -552,9 +553,8 @@ class ShanghaiFantasy implements Plugin.PluginBase {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
-          'Referer': `${this.site}/library/?pages=${pageNo}`,
-          'User-Agent':
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+          'Referer': `${this.site}/library/`,
+          'User-Agent': 'Mozilla/5.0 ...', // Use full UA string as before
         },
       });
 
