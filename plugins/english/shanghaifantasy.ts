@@ -42,7 +42,7 @@ class ShanghaiFantasy implements Plugin.PluginBase {
   name = 'Shanghai Fantasy';
   icon = 'src/en/shanghaifantasy/icon.png';
   site = 'https://shanghaifantasy.com';
-  version = '1.0.0';
+  version = '1.0.1';
   webStorageUtilized = false;
 
   filters = {
