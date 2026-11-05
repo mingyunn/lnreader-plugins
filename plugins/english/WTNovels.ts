@@ -10,7 +10,7 @@ class WTNovels implements Plugin.PluginBase {
   name = 'WTNovels';
   icon = 'src/en/wtnovels/icon.png';
   site = 'https://www.wtnovels.com';
-  version = '1.0.0';
+  version = '1.0.1';
 
   filters = {
     genre: {
@@ -282,7 +282,39 @@ class WTNovels implements Plugin.PluginBase {
       .find('script, style, ins, iframe, button, .ads, .code-block')
       .remove();
 
-    return content.html() || '';
+    // The site wraps text in <span>s and sometimes splits one sentence across
+    // several <p> or <br>. Unwrap the spans, turn stray <br>/newlines into
+    // spaces, then join paragraphs that were cut off mid-sentence.
+    content.find('span').each((_, el) => {
+      $(el).replaceWith($(el).html() || '');
+    });
+    content.find('br').replaceWith(' ');
+
+    const blocks = content.children('p, div').length
+      ? content.children('p, div')
+      : content.find('p');
+
+    const paragraphs: string[] = [];
+    // A paragraph is complete if it ends with sentence punctuation, closing quotes or a dash
+    const endsSentence = /[.!?…:;~)\]"'”’」』—–-]$/;
+
+    blocks.each((_, el) => {
+      const html = ($(el).html() || '').replace(/\s+/g, ' ').trim();
+      const text = $(el).text().replace(/\s+/g, ' ').trim();
+      if (!text) return;
+
+      const prev = paragraphs.length ? paragraphs[paragraphs.length - 1] : null;
+      const prevText = prev ? loadCheerio(prev).text().trim() : '';
+
+      if (prev && prevText && !endsSentence.test(prevText)) {
+        paragraphs[paragraphs.length - 1] = `${prev} ${html}`;
+      } else {
+        paragraphs.push(html);
+      }
+    });
+
+    if (!paragraphs.length) return content.html() || '';
+    return paragraphs.map(p => `<p>${p}</p>`).join('\n');
   }
 
   async searchNovels(
